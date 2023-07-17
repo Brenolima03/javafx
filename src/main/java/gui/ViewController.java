@@ -1,49 +1,53 @@
 package gui;
 
 import java.net.URL;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import gui.util.Alerts;
-import gui.util.Constraints;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ComboBox;
+import model.entities.Person;
 
 public class ViewController implements Initializable {
 
     @FXML
-    private TextField txtNumber1;
+    private ComboBox<Person> comboBoxPerson;
+    
     @FXML
-    private TextField txtNumber2;
+    private Button btAll;
+    
     @FXML
-    private Button btSum;
+    private ObservableList<Person> obsList;
+    
     @FXML
-    private Label labelResult;
-
-    @FXML
-    public void onBtSumAction() {
-        try {
-        Locale.setDefault(Locale.US);
-        double number1 = Double.parseDouble(txtNumber1.getText());
-        double number2 = Double.parseDouble(txtNumber2.getText());
-        double sum = number1 + number2;
-        labelResult.setText(String.format("%.2f", sum));
-        }
-        catch (NumberFormatException e) {
-            Alerts.showAlert("Error", null, e.getMessage(), AlertType.ERROR);
+    public void onBtAllAction() {
+        for (Person person : comboBoxPerson.getItems()) {
+            System.out.println(person);
         }
     }
 
+
+
+    @FXML
+    public void onComboBoxPersonAction() {
+        // Retrieves the selected model on combobox
+        Person person = comboBoxPerson.getSelectionModel().getSelectedItem();
+        System.out.println(person);
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Constraints.setTextFieldDouble(txtNumber1);
-        Constraints.setTextFieldDouble(txtNumber2);
-        
-        Constraints.setTextFieldMaxLength(txtNumber1, 12);
-        Constraints.setTextFieldMaxLength(txtNumber2, 12);
+        List<Person> list = new ArrayList<>();
+        list.add(new Person(1, "Bob", "bob@gmail.com"));
+        list.add(new Person(2, "Breno", "breno@gmail.com"));
+        list.add(new Person(3, "Eunice", "eunice@gmail.com"));
+
+        obsList = FXCollections.observableArrayList(list);
+        comboBoxPerson.setItems(obsList);
     }
 }

@@ -4,5 +4,6 @@ module application {
     requires transitive javafx.graphics;
 
     opens application to javafx.fxml;
+    opens gui to javafx.fxml;
     exports application;
 }

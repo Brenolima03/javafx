@@ -8,6 +8,5 @@ module application {
     opens gui to javafx.fxml;
     opens model.entities to javafx.base;
 
-    
     exports application;
 }

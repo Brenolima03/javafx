@@ -31,7 +31,6 @@
             <artifactId>h2</artifactId>
             <version>2.2.220</version> <!-- Use a versão mais recente disponível -->
         </dependency>
-        
     </dependencies>
     <build>
         <plugins>

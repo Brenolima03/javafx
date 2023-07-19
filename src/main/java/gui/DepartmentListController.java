@@ -94,6 +94,5 @@ public class DepartmentListController implements Initializable {
 		catch (IOException e) {
 			Alerts.showAlert("IO Exception", null, e.getMessage(), AlertType.ERROR);
 		}
-		
 	}
 }

@@ -35,8 +35,6 @@ public class DB {
         }
     }
 
-    // Restante do código igual, incluindo os métodos closeStatement e closeResultSet
-
     private static String getProperties(String key) {
         try (InputStream input = DB.class.getClassLoader().getResourceAsStream("db.properties")) {
             Properties prop = new Properties();
@@ -46,6 +44,7 @@ public class DB {
             throw new DbException(e.getMessage());
         }
     }
+    
 
     public static void closeResultSet(ResultSet rs) {
     }

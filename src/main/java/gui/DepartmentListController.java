@@ -84,6 +84,10 @@ public class DepartmentListController implements Initializable {
 
 			DepartmentFormController controller = loader.getController();
 			controller.setDepartment(obj);
+			
+			
+			controller.setService(new DepartmentService());
+
 			controller.updateFormData();
 			
 			Stage dialogStage = new Stage();
@@ -95,8 +99,7 @@ public class DepartmentListController implements Initializable {
 			// Makes you close it to go back to the other window
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", null, e.getMessage(), AlertType.ERROR);
 		}
 	}

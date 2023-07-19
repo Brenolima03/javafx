@@ -13,12 +13,18 @@ public class DepartmentService {
 	private DepartmentDao dao = DaoFactory.createDepartmentDao();
 	
 	public List<Department> findAll() {
-    try {
-        return dao.findAll();
-    } catch (DbException e) {
-        System.out.println("The department table is empty");
-        return new ArrayList<>(); // Returns an empty array.
+        try {
+            return dao.findAll();
+        } catch (DbException e) {
+            System.out.println("The department table is empty");
+            return new ArrayList<>(); // Returns an empty array.
+        }
     }
-}
-
+    public void saveOrUpdate(Department obj) {
+        if (obj.getId() == null) {
+            dao.insert(obj);
+        } else {
+            dao.update(obj);    
+        } 
+    }
 }

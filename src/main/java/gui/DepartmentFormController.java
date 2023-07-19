@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import db.DbException;
+import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Constraints;
 import gui.util.Utils;
@@ -20,9 +23,10 @@ import model.services.DepartmentService;
 public class DepartmentFormController implements Initializable {
 
     private Department entity;
-    
+
     private DepartmentService service;
 
+    private List<DataChangeListener> dataChangeListener = new ArrayList<>();
     @FXML
     private TextField txtId;
 
@@ -45,22 +49,35 @@ public class DepartmentFormController implements Initializable {
     public void setService(DepartmentService service) {
         this.service = service;
     }
-    
+
+    public void subscribeDataChangeListener(DataChangeListener listener) {
+        dataChangeListener.add(listener);
+    }
+
     @FXML
     public void onBtSaveAction(ActionEvent event) {
         if (entity == null) {
             throw new IllegalStateException("Entity was null.");
-        } if (service == null) {
+        }
+        if (service == null) {
             throw new IllegalStateException("Service was null.");
-        } try {
+        }
+        try {
             entity = getFormData();
             service.saveOrUpdate(entity);
+            notifyDataChangeListener();
+
             // Closes the window
             Utils.currentStage(event).close();
         } catch (DbException e) {
             Alerts.showAlert("error saving object", null, e.getMessage(), AlertType.ERROR);
         }
-        
+    }
+
+    private void notifyDataChangeListener() {
+        for (DataChangeListener listener : dataChangeListener) {
+            listener.onDataChanged();
+        }
     }
 
     private Department getFormData() {
@@ -81,8 +98,8 @@ public class DepartmentFormController implements Initializable {
     }
 
     public void initializeNodes() {
-        Constraints.setTextFieldInteger(txtId);        
-        Constraints.setTextFieldMaxLength(txtName, 30);        
+        Constraints.setTextFieldInteger(txtId);
+        Constraints.setTextFieldMaxLength(txtName, 30);
     }
 
     public void updateFormData() {

@@ -17,7 +17,8 @@ public class DB {
         if (conn == null) {
             try {
                 // Utilizando as propriedades do H2 do arquivo db.properties
-                conn = DriverManager.getConnection(getProperties("dburl"), getProperties("user"), getProperties("password"));
+                conn = DriverManager.getConnection(getProperties("dburl"), getProperties("user"),
+                        getProperties("password"));
             } catch (SQLException e) {
                 throw new DbException(e.getMessage());
             }
@@ -44,7 +45,6 @@ public class DB {
             throw new DbException(e.getMessage());
         }
     }
-    
 
     public static void closeResultSet(ResultSet rs) {
     }

@@ -12,9 +12,9 @@ public class Seller implements Serializable {
 	private String email;
 	private Date birthDate;
 	private Double baseSalary;
-	
+
 	private Department department;
-	
+
 	public Seller() {
 	}
 
@@ -103,6 +103,6 @@ public class Seller implements Serializable {
 	@Override
 	public String toString() {
 		return "Seller [id=" + id + ", name=" + name + ", email=" + email + ", birthDate=" + birthDate + ", baseSalary="
-		+ baseSalary + ", department=" + department + "]";
+				+ baseSalary + ", department=" + department + "]";
 	}
 }

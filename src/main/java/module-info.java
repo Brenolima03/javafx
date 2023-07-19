@@ -7,6 +7,6 @@ module application {
     opens gui to javafx.fxml;
     opens model.entities to javafx.base;
 
-
+requires java.sql;
     exports application;
 }

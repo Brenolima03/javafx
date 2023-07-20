@@ -22,7 +22,7 @@ public class DB {
                 // Using the H2 properties from the db.properties file
                 conn = DriverManager.getConnection(getProperties("dburl"), getProperties("user"),
                         getProperties("password"));
-                
+
                 createDatabaseIfNotExists();
             } catch (SQLException e) {
                 throw new DbException(e.getMessage());
@@ -34,13 +34,13 @@ public class DB {
     public static void createDatabaseIfNotExists() {
         try (Connection conn = DriverManager.getConnection(getProperties("dburl"), getProperties("user"),
                 getProperties("password"));
-             Statement st = conn.createStatement()) {
+                Statement st = conn.createStatement()) {
 
             // Check if the "Department" table exists
             ResultSet rs = conn.getMetaData().getTables(null, null, "Department", null);
             if (!rs.next()) {
                 // The "Department" table does not exist, so we'll create it
-                
+
                 // Read the content from the schema.sql file
                 String sqlScript = readSqlScriptFromFile("schema.sql");
 
@@ -77,7 +77,7 @@ public class DB {
     private static String readSqlScriptFromFile(String fileName) throws IOException {
         StringBuilder content = new StringBuilder();
         try (InputStream input = DB.class.getClassLoader().getResourceAsStream(fileName);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
 
             String line;
             while ((line = reader.readLine()) != null) {

@@ -26,29 +26,37 @@ public class DB {
                 createDatabaseIfNotExists();
             } catch (SQLException e) {
                 throw new DbException(e.getMessage());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
         return conn;
     }
 
-    public static void createDatabaseIfNotExists() {
+    public static void createDatabaseIfNotExists() throws IOException {
         try (Connection conn = DriverManager.getConnection(getProperties("dburl"), getProperties("user"),
                 getProperties("password"));
                 Statement st = conn.createStatement()) {
 
             // Check if the "Department" table exists
-            ResultSet rs = conn.getMetaData().getTables(null, null, "Department", null);
-            if (!rs.next()) {
+            ResultSet departmentTableRs = conn.getMetaData().getTables(null, null, "Department", null);
+            if (!departmentTableRs.next()) {
                 // The "Department" table does not exist, so we'll create it
-
-                // Read the content from the schema.sql file
-                String sqlScript = readSqlScriptFromFile("schema.sql");
-
-                // Execute the SQL script to create the "Department" table
-                st.executeUpdate(sqlScript);
+                String departmentSqlScript = readSqlScriptFromFile("schema_department.sql");
+                st.executeUpdate(departmentSqlScript);
             }
 
-        } catch (SQLException | IOException e) {
+            // Check if the "Seller" table exists
+            ResultSet sellerTableRs = conn.getMetaData().getTables(null, null, "Seller", null);
+            if (!sellerTableRs.next()) {
+                // The "Seller" table does not exist, so we'll create it
+                String sellerSqlScript = readSqlScriptFromFile("schema_seller.sql");
+                st.executeUpdate(sellerSqlScript);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Print the error stack trace
             throw new DbException(e.getMessage());
         }
     }
@@ -74,15 +82,18 @@ public class DB {
         }
     }
 
-    private static String readSqlScriptFromFile(String fileName) throws IOException {
+    private static String readSqlScriptFromFile(String fileName) {
         StringBuilder content = new StringBuilder();
-        try (InputStream input = DB.class.getClassLoader().getResourceAsStream(fileName);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
+        try (InputStream input = DB.class.getResourceAsStream("/" + fileName);
+                InputStreamReader isr = new InputStreamReader(input);
+                BufferedReader reader = new BufferedReader(isr)) {
 
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
             }
+        } catch (IOException e) {
+            throw new DbException("Error reading SQL script file: " + fileName);
         }
         return content.toString();
     }
